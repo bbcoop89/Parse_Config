@@ -5,7 +5,15 @@ require "vendor/autoload.php";
 use ParseConfig\Services\ConfigurationParsingService;
 use ParseConfig\Services\FileService;
 
-$fileService = new FileService('config.txt');
+$options = getopt("f:");
+
+if(array_key_exists("f", $options)) {
+	$file = $options["f"];
+} else {
+	$file = 'config.txt';
+}
+
+$fileService = new FileService($file);
 
 $parseConfigurationService = new ConfigurationParsingService($fileService);
 
