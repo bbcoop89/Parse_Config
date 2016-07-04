@@ -1,0 +1,10 @@
+{
+  "require": {
+    "zendframework/zendframework": "^2.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "ParseConfig\\": "src/"
+    }
+  }
+}
