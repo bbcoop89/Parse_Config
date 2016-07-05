@@ -10,3 +10,9 @@ The script will accept an optional "-f" option for a user-defined file path to a
 ex. php parseConfig.php -f ~/Desktop/config.txt
 
 If this option is not used, the program will automatically use the test "config.txt" inside the project.
+
+In order to get a configuration value by key:
+
+$configurationMapper = new ConfigurationMapper(DatabaseSettings::getMySqlPdo());
+
+$configValue = $configurationMapper->getByKey('debug_mode');
