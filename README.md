@@ -19,4 +19,4 @@ $configValue = $configurationMapper->getByKey('debug_mode');
 
 Sql Dump file is included.
 
-First create the database "parse_config" and import the sql script.
+Import parse_config.sql into your local environment.
