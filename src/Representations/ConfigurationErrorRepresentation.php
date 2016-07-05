@@ -22,12 +22,15 @@ class ConfigurationErrorRepresentation extends ConfigurationResponseRepresentati
      * @param ConfigurationWarningRepresentation[]  $warnings
      * @return ConfigurationErrorRepresentation
      */
-    public static function createError($message, array $warnings)
+    public static function createError($message, array $warnings = [])
     {
         $configurationError = new self();
         $configurationError->status = 'Error';
         $configurationError->message = $message;
-        $configurationError->warnings = $warnings;
+
+        if(!empty($warnings)) {
+            $configurationError->warnings = $warnings;
+        }
 
         return $configurationError;
     }
