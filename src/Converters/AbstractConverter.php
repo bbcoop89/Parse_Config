@@ -15,6 +15,11 @@ abstract class AbstractConverter
     protected $value;
 
     /**
+     * @var string $type
+     */
+    protected $type;
+
+    /**
      * AbstractConverter constructor.
      *
      * @param string $value
@@ -38,6 +43,22 @@ abstract class AbstractConverter
     public function setValue($value)
     {
         $this->value = $value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
     }
 
     /**

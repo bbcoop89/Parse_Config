@@ -10,6 +10,18 @@ namespace ParseConfig\Converters;
 class BooleanConverter extends AbstractConverter
 {
     /**
+     * BooleanConverter constructor.
+     *
+     * @param string $value
+     */
+    public function __construct($value)
+    {
+        $this->type = 'boolean';
+
+        parent::__construct($value);
+    }
+
+    /**
      * @return boolean
      */
     function convert()

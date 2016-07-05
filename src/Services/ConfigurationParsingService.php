@@ -6,6 +6,7 @@ namespace ParseConfig\Services;
 use ParseConfig\Converters\AbstractConverter;
 use ParseConfig\Entities\Configuration;
 use ParseConfig\Exceptions\ConfigurationFileReadingException;
+use ParseConfig\Exceptions\UnableToCreateConfigurationException;
 use ParseConfig\Exceptions\UnableToOpenConfigurationException;
 use ParseConfig\Factories\ConfigurationValueConverterFactory;
 use ParseConfig\Helpers\Output\ParseConfigErrorOutputHelper;
@@ -17,6 +18,7 @@ use ParseConfig\Representations\ConfigurationErrorRepresentation;
 use ParseConfig\Representations\ConfigurationWarningRepresentation;
 use ParseConfig\Representations\ConfigurationSuccessRepresentation;
 use ParseConfig\Representations\ParseStatusRepresentation;
+use ParseConfig\Settings\DatabaseSettings;
 
 
 /**
@@ -103,7 +105,7 @@ class ConfigurationParsingService
      */
     public function getConfigurationSettings()
     {
-        return $this->parseConfiguration();
+        $this->parseConfiguration();
     }
 
     /**
@@ -187,11 +189,12 @@ class ConfigurationParsingService
         return $success;
     }
 
+
     /**
      * @param array $invalidResponses
      * @return string
      */
-    private function notifyError(array $invalidResponses)
+    private function notifyError(array $invalidResponses = [])
     {
         $error = ConfigurationErrorRepresentation::createError(
             'Configurations could not be saved due to invalid data.  Please fix these and try again.',
@@ -205,9 +208,10 @@ class ConfigurationParsingService
         return $error;
     }
 
+
     /**
-     * @return array
      * @throws ConfigurationFileReadingException
+     * @throws UnableToCreateConfigurationException
      * @throws UnableToOpenConfigurationException
      */
     private function parseConfiguration()
@@ -243,7 +247,7 @@ class ConfigurationParsingService
                     } else {
                         $trueValue = $this->convertValueToTrueValue($dataPieces[1]);
 
-                        $configuration = new Configuration($dataPieces[0], $trueValue);
+                        $configuration = new Configuration($dataPieces[0], $trueValue, $this->configurationValueConverter->getType());
 
                         $this->notifySuccess($configuration);
 
@@ -264,10 +268,17 @@ class ConfigurationParsingService
         if(!empty($invalidResponses)) {
             $this->notifyError($invalidResponses);
         } else {
-            $configurationMapper = new ConfigurationMapper();
-            $configurationMapper->saveAll($configurations);
+            $configurationMapper = new ConfigurationMapper(DatabaseSettings::getMySqlPdo());
+            $success = $configurationMapper->saveAllConfigurations($configurations, $this->fileService->getConfigurationFileName());
 
-            $this->notifyStatus('ENTITIES CREATED', 'CONFIGURATIONS SAVED');
+            if($success) {
+                $this->notifyStatus('ENTITIES CREATED', 'CONFIGURATIONS SAVED');
+            } else {
+                throw new UnableToCreateConfigurationException(
+                    "Configurations could not be inserted into the database"
+                );
+            }
+
         }
 
         $this->notifyStatus(ParseStatusRepresentation::ENDING_STATUS);
@@ -282,6 +293,7 @@ class ConfigurationParsingService
         $this->setConfigurationValueConverter(ConfigurationValueConverterFactory::getConfigurationValueConverter($value));
         return $this->configurationValueConverter->convert();
     }
+
     /**
      * @param resource $fileHandle
      * @return string
@@ -306,6 +318,6 @@ class ConfigurationParsingService
      */
     private function configLineIsBlank($data)
     {
-        return $data === "\n";
+        return $data === "\n" || trim($data) === '';
     }
 }

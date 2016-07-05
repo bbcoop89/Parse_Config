@@ -13,6 +13,11 @@ use ParseConfig\Helpers\ParseConfigValueHelper;
 class Configuration implements \JsonSerializable
 {
     /**
+     * @var int $id
+     */
+    private $id;
+
+    /**
      * @var string $key
      */
     private $key;
@@ -23,15 +28,43 @@ class Configuration implements \JsonSerializable
     private $value;
 
     /**
+     * @var ConfigurationType $type
+     */
+    private $type;
+
+    /**
+     * @var ConfigurationFile $file
+     */
+    private $file;
+
+    /**
      * Configuration constructor.
      *
      * @param string $key
      * @param mixed $value
+     * @param string $typeName
      */
-    public function __construct($key, $value)
+    public function __construct($key, $value, $typeName)
     {
         $this->key = ParseConfigValueHelper::normalizeValue($key);
         $this->value = $value;
+        $this->type = new ConfigurationType($typeName);
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
     }
 
     /**
@@ -67,11 +100,43 @@ class Configuration implements \JsonSerializable
     }
 
     /**
+     * @return ConfigurationType
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param ConfigurationType $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * @return ConfigurationFile
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
+     * @param ConfigurationFile $file
+     */
+    public function setFile($file)
+    {
+        $this->file = $file;
+    }
+
+    /**
      * @return string
      */
     public function __toString()
     {
-        return "{key: $this->key, value: $this->value}";
+        return "{key: $this->key, value: $this->value, type:" . json_encode($this->type) . '}';
 
     }
 
@@ -88,6 +153,7 @@ class Configuration implements \JsonSerializable
 
         $configuration->key = $this->key;
         $configuration->value = $this->value;
+        $configuration->type = $this->type;
 
         return $configuration;
     }
