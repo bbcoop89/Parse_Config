@@ -22,3 +22,4 @@ $fileService = new FileService($file);
 $parseConfigurationService = new ConfigurationParsingService($fileService);
 
 $parseConfigurationService->getConfigurationSettings();
+

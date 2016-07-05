@@ -54,16 +54,16 @@ class ConfigurationMapper
 
     /**
      * @param Configuration[] $configurations
-     * @param string $configFileName
+     * @param string $filePath
      * @return bool
      * @throws UnableToCreateConfigurationException
      */
-    public function saveAllConfigurations(array $configurations, $configFileName)
+    public function saveAllConfigurations(array $configurations, $filePath)
     {
         try {
             $this->pdo->beginTransaction();
 
-            $configurationFile = $this->configurationFileMapper->addConfigurationFile(new ConfigurationFile($configFileName));
+            $configurationFile = $this->configurationFileMapper->addConfigurationFile(new ConfigurationFile($filePath));
 
             foreach($configurations as $configuration) {
                 $configurationType = $this->configurationTypeMapper->getByName($configuration->getType());

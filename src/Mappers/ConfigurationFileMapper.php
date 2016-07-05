@@ -47,7 +47,7 @@ class ConfigurationFileMapper
 
         $properties = new \stdClass();
         $properties->id = $fileable->getConfigFileId();
-        $properties->fileName = $fileable->getConfigFileName();
+        $properties->filePath = $fileable->getConfigFilePath();
 
         ReflectionService::setProperties($configurationFile, $properties);
 
@@ -108,7 +108,7 @@ class ConfigurationFileMapper
     {
         try {
             $stmt = $this->pdo->prepare(QueryService::insertConfigurationFile());
-            $stmt->bindValue(':fileName', $configurationFile->getFileName());
+            $stmt->bindValue(':filePath', $configurationFile->getFilePath());
             $stmt->execute();
 
             $properties = new \stdClass();
@@ -133,7 +133,7 @@ class ConfigurationFileMapper
     {
         if(
             !property_exists($fileable, 'config_file_id')
-            || !property_exists($fileable, 'config_file_name')
+            || !property_exists($fileable, 'config_file_path')
         ) {
             throw new ResultSetNotValidException(
                 "Result Set for Configuration File not Valid."
