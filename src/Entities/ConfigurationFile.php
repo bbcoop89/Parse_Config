@@ -15,18 +15,18 @@ class ConfigurationFile implements \JsonSerializable
     private $id;
 
     /**
-     * @var string $fileName
+     * @var string $filePath
      */
-    private $fileName;
+    private $filePath;
 
     /**
      * ConfigurationFile constructor.
      *
-     * @param string $fileName
+     * @param string $filePath
      */
-    public function __construct($fileName)
+    public function __construct($filePath)
     {
-        $this->fileName = $fileName;
+        $this->filePath = $filePath;
     }
 
     /**
@@ -48,17 +48,17 @@ class ConfigurationFile implements \JsonSerializable
     /**
      * @return string
      */
-    public function getFileName()
+    public function getFilePath()
     {
-        return $this->fileName;
+        return $this->filePath;
     }
 
     /**
-     * @param string $fileName
+     * @param string $filePath
      */
-    public function setFileName($fileName)
+    public function setFilePath($filePath)
     {
-        $this->fileName = $fileName;
+        $this->filePath = $filePath;
     }
 
     /**
@@ -72,7 +72,7 @@ class ConfigurationFile implements \JsonSerializable
     {
         $configurationFile = new \stdClass();
 
-        $configurationFile->fileName = $this->fileName;;
+        $configurationFile->filePath = $this->filePath;
 
         return $configurationFile;
     }

@@ -17,5 +17,5 @@ interface Fileable
     /**
      * @return string
      */
-    public function getConfigFileName();
+    public function getConfigFilePath();
 }

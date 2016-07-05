@@ -33,9 +33,9 @@ SQL;
      */
     private static $insertConfigurationFileSql = <<<SQL
     INSERT INTO config_file (
-      config_file_name
+      config_file_path
     ) VALUES (
-      :fileName
+      :filePath
     )
 SQL;
 

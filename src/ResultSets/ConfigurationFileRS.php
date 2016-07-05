@@ -15,9 +15,9 @@ class ConfigurationFileRS implements Fileable
     private $config_file_id;
 
     /**
-     * @var string $config_file_name
+     * @var string $config_file_path
      */
-    private $config_file_name;
+    private $config_file_path;
 
     /**
      * @return int
@@ -30,8 +30,8 @@ class ConfigurationFileRS implements Fileable
     /**
      * @return string
      */
-    public function getConfigFileName()
+    public function getConfigFilePath()
     {
-        return $this->config_file_name;
+        return $this->config_file_path;
     }
 }
